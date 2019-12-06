@@ -48,4 +48,24 @@ resource "azurerm_virtual_network" "lab" {
 
 }
 
+# Deploy Azure Public IP for Load Balancer
 
+resource "azurerm_public_ip" "lab" {
+        name                    = "publicIPforLB"
+        location                = azurerm_resource_group.lab.location
+        resource_group_name     = azurerm_resource_group.lab.name
+        allocation_method       = "Static"
+}
+
+# Deploy Azure Load Balancer
+
+resource "azurerm_lb" "lab" {
+        name                    = "LabLoadBalancer"
+        location                = azurerm_resource_group.lab.location
+        resource_group_name     = azurerm_resource_group.lab.name
+
+        frontend_ip_configuration {
+            name                = "PublicIPAddress"
+            public_ip_address_id = azurerm_public_ip.lab.id
+        }
+}
