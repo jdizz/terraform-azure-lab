@@ -100,3 +100,22 @@ resource "azurerm_kubernetes_cluster" "lab" {
         Environment         = "lab"
     }
 }
+
+# Deploy Azure Storage Share
+resource "azurerm_storage_account" "lab" {
+    name                    = "lab"
+    resource_group_name     = azurerm_resource_group.lab.name
+    location                = azurerm_resource_group.lab.location
+    account_kind            = "FileStorage"
+    account_tier            = "Premium"
+    account_replication_type    = "LRS"
+    enable_advanced_threat_protection = true
+    enable_file_encryption  = true
+    enable_https_traffic_only = true
+}
+
+resource "azurerm_storage_share" "lab" {
+    name                    = "labshare"
+    storage_account_name    = azurerm_storage_account.lab.name
+    quota                   = 10
+}
