@@ -82,13 +82,12 @@ resource "azurerm_kubernetes_cluster" "lab" {
     resource_group_name     = azurerm_resource_group.lab.name
     dns_prefix              = "labaks1"
 
-    default_node_pool {
+    agent_pool_profile {
         name                = "default"
         enable_auto_scaling = true
         max_count           = 1
         min_count           = 1
-        node_count          = 1
-        type                = VirtualMachineScaleSets
+        os_type             = "Linux"
         vm_size             = "Standard_B1ls"
     }
 
